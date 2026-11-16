@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OREO AI Assistant</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#050b18;color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:24px 20px;
+ background:linear-gradient(120deg,#061c43,#087bdb);
+ border-radius:0 0 25px 25px;
+}
+h1{font-size:30px;margin:5px 0}
+.sub{color:#b8dcff}
+main{padding:22px}
+.panel{
+ background:#101d32;border:1px solid #174c80;
+ border-radius:20px;padding:20px;margin-bottom:20px;
+}
+.status{color:#40e5b0;font-size:14px}
+.orb{
+ width:145px;height:145px;margin:25px auto;
+ border-radius:50%;
+ background:radial-gradient(circle,#43caff,#0754b5,#06152e);
+ box-shadow:0 0 35px #087bdb;
+ display:flex;align-items:center;justify-content:center;
+ font-size:42px;font-weight:bold;
+}
+button{
+ border:0;border-radius:14px;padding:15px;
+ background:#087bdb;color:white;font-size:16px;
+}
+.mic{width:100%;background:linear-gradient(90deg,#087bdb,#13b9e9)}
+input{
+ width:100%;padding:15px;border-radius:12px;
+ border:1px solid #28649c;background:#091426;
+ color:white;font-size:16px;
+}
+#chat{min-height:80px;line-height:1.6;overflow-wrap:anywhere}
+.small{font-size:13px;color:#91a9c5}
+</style>
+</head>
+<body>
+
+<header>
+ <div>✦ OREO TECHNOLOGY</div>
+ <h1>OREO AI</h1>
+ <div class="sub">Your Personal Voice Assistant</div>
+</header>
+
+<main>
+ <div class="panel">
+  <div class="status">● SYSTEM ONLINE</div>
+  <div class="orb">O</div>
+  <h2 style="text-align:center">Hello! Main Oreo hoon.</h2>
+  <p class="small" style="text-align:center">
+   Aapka Hindi Voice Assistant
+  </p>
+  <button class="mic" onclick="listen()">🎙 बोलने के लिए दबाएँ</button>
+ </div>
+
+ <div class="panel">
+  <h3>💬 Oreo Chat</h3>
+  <div id="chat">नमस्ते! मैं आपकी क्या मदद करूँ?</div>
+  <br>
+  <input id="msg" placeholder="यहाँ अपना मैसेज लिखें">
+  <br><br>
+  <button onclick="send()">Send ➤</button>
+ </div>
+
+ <div class="panel">
+  <h3>⚙️ System</h3>
+  <p class="status">● Oreo Interface Ready</p>
+  <p class="small">Version 1.0 | Android Compatible UI</p>
+ </div>
+</main>
+
+<script>
+function speak(text){
+ let voice=new SpeechSynthesisUtterance(text);
+ voice.lang="hi-IN";
+ voice.rate=0.95;
+ speechSynthesis.speak(voice);
+}
+
+function reply(text){
+ let answer="आपने कहा: "+text+
+ ". मैं Oreo हूँ। अभी मेरा AI सर्वर कनेक्ट नहीं है।";
+ document.getElementById("chat").innerText=answer;
+ speak(answer);
+}
+
+function send(){
+ let input=document.getElementById("msg");
+ let text=input.value.trim();
+ if(!text)return;
+ input.value="";
+ reply(text);
+}
+
+function listen(){
+ const Recognition=window.SpeechRecognition||
+ window.webkitSpeechRecognition;
+ if(!Recognition){
+  alert("Voice recognition इस ब्राउज़र में उपलब्ध नहीं है।");
+  return;
+ }
+ let rec=new Recognition();
+ rec.lang="hi-IN";
+ rec.onresult=function(e){
+  let text=e.results[0][0].transcript;
+  document.getElementById("msg").value=text;
+  reply(text);
+ };
+ rec.onerror=function(){
+  alert("Microphone permission और internet connection जाँचें।");
+ };
+ rec.start();
+}
+</script>
+</body>
+</html>
